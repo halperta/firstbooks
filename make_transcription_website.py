@@ -2,15 +2,17 @@ import codecs
 import os
 
 output_dir = "/Users/dhg/workspace/symposiumPrep/train_output_17-05-24"
-website_dir = "/Users/dhg/workspace/halperta/firstbooks"
-transcriptions_dir = "%s/transcriptions" % (website_dir)
+github_dir = "/Users/dhg/workspace/halperta/firstbooks"
+website = "http://www.halperta.com/firstbooks"
+transcriptions_dir = "%s/transcriptions" % (github_dir)
+transcriptions_site = "%s/transcriptions" % (website)
 website_image_size = "800"  # 400, 800, 1000
 
 
 
 all_pages = dict()  # all_pages[book_name] = page_names
 
-with codecs.open("%s/index.html" % (website_dir), 'w', encoding='utf8') as index_fout:
+with codecs.open("%s/index.html" % (github_dir), 'w', encoding='utf8') as index_fout:
   index_fout.write("""
     This website was designed to accompany the
     <a href="http://sites.utexas.edu/firstbooks/symposium">Reading the First Books Symposium</a>,
@@ -24,6 +26,8 @@ with codecs.open("%s/index.html" % (website_dir), 'w', encoding='utf8') as index
     <br/><br/>\n""")
   index_fout.write('<br/><br/>\n')
 
+  if not os.path.exists("%s" % (transcriptions_dir)):
+    os.makedirs("%s" % (transcriptions_dir))
   for book_name in os.listdir(output_dir):
     if book_name[0] != '.':  # skip hidden files
       if book_name not in all_pages:
@@ -42,10 +46,10 @@ with codecs.open("%s/index.html" % (website_dir), 'w', encoding='utf8') as index
         print 'Writing %s' % (output_filename)
         with codecs.open(output_filename, 'w', encoding='utf8') as fout:
           if i > 0:
-            fout.write('<a href="%s/%s/%s.html">Prev</a>&nbsp;\n' % (transcriptions_dir, book_name, all_pages[book_name][i-1]))
-          fout.write('<a href="%s/%s/index.html">Up</a>&nbsp;\n' % (transcriptions_dir, book_name))
+            fout.write('<a href="%s/%s/%s.html">Prev</a>&nbsp;\n' % (transcriptions_site, book_name, all_pages[book_name][i-1]))
+          fout.write('<a href="%s/%s/index.html">Up</a>&nbsp;\n' % (transcriptions_site, book_name))
           if i < len(all_pages[book_name])-1:
-            fout.write('<a href="%s/%s/%s.html">Next</a>\n' % (transcriptions_dir, book_name, all_pages[book_name][i+1]))
+            fout.write('<a href="%s/%s/%s.html">Next</a>\n' % (transcriptions_site, book_name, all_pages[book_name][i+1]))
           fout.write('<br/>\n')
 
           fout.write('<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">\n')
@@ -61,9 +65,9 @@ with codecs.open("%s/index.html" % (website_dir), 'w', encoding='utf8') as index
           fout.write('</body>\n')
           fout.write('</html>\n')
       with codecs.open("%s/%s/index.html" % (transcriptions_dir, book_name), 'w', encoding='utf8') as fout:
-        fout.write('<a href="%s/index.html">Home</a><br/><br/>\n' % (website_dir))
+        fout.write('<a href="%s/index.html">Home</a><br/><br/>\n' % (website))
         for page_name in all_pages[book_name]:
-          fout.write('<a href="%s/%s/%s.html">%s</a><br/>\n' % (transcriptions_dir, book_name, page_name, page_name))
-      index_fout.write('<a href="%s/%s/index.html">%s</a><br/>\n' % (transcriptions_dir, book_name, book_name))
+          fout.write('<a href="%s/%s/%s.html">%s</a><br/>\n' % (transcriptions_site, book_name, page_name, page_name))
+      index_fout.write('<a href="%s/%s/index.html">%s</a><br/>\n' % (transcriptions_site, book_name, book_name))
 
 
