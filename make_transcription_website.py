@@ -17,7 +17,7 @@ with codecs.open("%s/index.html" % (github_dir), 'w', encoding='utf8') as index_
     <a href="http://sites.utexas.edu/firstbooks/symposium">Reading the First Books Symposium</a>,
     held May 30, 2017, at the University of Texas at Austin. Each link represents a book in the 
     <a href="http://primeroslibros.org/">Primeros Libros</a> collection. Follow the links to see rough transcriptions
-    of sample pages produced using the <a href="github.com/tberg12/ocular">Ocular Optical
+    of sample pages produced using the <a href="http://www.github.com/tberg12/ocular">Ocular Optical
     Character Recognition</a> system. The transcriptions have not been reviewed or undergone post-processing of
     any kind, and were produced for experimental purposes using very limited amounts of data.<br/><br/>\n""")
   index_fout.write("""
