@@ -2,13 +2,20 @@ import codecs
 import os
 import csv
 
-#output_dir = "/Users/halperta/Downloads/neh_transcribedBooks_12-18-17"
-output_dir = "/Users/halperta/Downloads/testhtml/"
-github_dir = "/Users/halperta/GitHub/firstbooks/"
+##output_dir = "/Users/halperta/Downloads/neh_transcribedBooks_12-18-17"
+# output_dir = "/Users/halperta/Downloads/testhtml/"
+# github_dir = "/Users/halperta/GitHub/firstbooks/"
+# website = "http://www.halperta.com/firstbooks"
+# transcriptions_dir = "%s/finalTranscriptions" % (github_dir)
+# website_image_size = "800"  # 400, 800, 1000
+# csvPath = "/Users/halperta/GitHub/ocr-auxiliary-data/pl-works-11-10-16.csv"
+
+output_dir = "/Users/hra288/Github/neh/TranscribedBooks"
+github_dir = "/Users/hra288/Github/neh/firstbooks/"
 website = "http://www.halperta.com/firstbooks"
 transcriptions_dir = "%s/finalTranscriptions" % (github_dir)
 website_image_size = "800"  # 400, 800, 1000
-csvPath = "/Users/halperta/GitHub/ocr-auxiliary-data/pl-works-11-10-16.csv"
+csvPath = "/Users/hra288/Github/neh/pl-works-11-10-16.csv"
 
 
 all_pages = dict()  # all_pages[book_name] = page_names
@@ -39,10 +46,15 @@ with codecs.open("%s/index.html" % (github_dir), 'w', encoding='utf8') as index_
   if not os.path.exists("%s" % (transcriptions_dir)):
     os.makedirs("%s" % (transcriptions_dir))
   for book_name in os.listdir(output_dir):
-    bookTitle = metadata_dict[book_name]['wks_title'].decode('utf-8') #haaupdate
-    bookPrinter = metadata_dict[book_name]['wks_printer'].decode('utf-8') #haaupdate
-    bookDate = metadata_dict[book_name]['wks_pub_date'].decode('utf-8') #haaupdate
     if book_name[0] != '.':  # skip hidden files
+      if book_name in metadata_dict:
+        bookTitle = metadata_dict[book_name]['wks_title'].decode('utf-8') #haaupdate
+        bookPrinter = metadata_dict[book_name]['wks_printer'].decode('utf-8') #haaupdate
+        bookDate = metadata_dict[book_name]['wks_pub_date'].decode('utf-8') #haaupdate
+      else:
+        bookTitle = book_name
+        bookPrinter = "printer unknown"
+        bookDate = "date unknown"
       if book_name not in all_pages:
         all_pages[book_name] = []
       if not os.path.exists("%s/%s" % (transcriptions_dir, book_name)):
@@ -53,6 +65,7 @@ with codecs.open("%s/index.html" % (github_dir), 'w', encoding='utf8') as index_
         suffix = "-1000_transcription.txt" #haaupdate TODO: fix to match actual outputs.
         if filename.endswith(suffix):
           page_name = filename[:-len(suffix)]
+          page_number = page_name[-5:]
           all_pages[book_name].append(page_name)
       for (i, page_name) in enumerate(all_pages[book_name]):
         print('Writing %s/%s/%s.html' % (transcriptions_dir, book_name, page_name))
@@ -71,6 +84,8 @@ with codecs.open("%s/index.html" % (github_dir), 'w', encoding='utf8') as index_
           fout.write('<a href="http://primeroslibros.org/page_view.php?id=%s&lang=en&page=1"><font size="+1">%s</font></a>' % (book_name, bookTitle)) #haaupdate
           fout.write('<br/>\n')
           fout.write('%s, %s.' % (bookPrinter,bookDate))
+          fout.write('<br/>\n')
+          fout.write('page: %s' % (page_number))
           fout.write('<br/>\n')
           fout.write('<br/>\n')
           fout.write('<br/>\n')
